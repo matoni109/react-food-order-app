@@ -34,6 +34,7 @@ const AvailableMeals = (props) => {
     return (
       <>
         <MealItem
+          id={meal.id} // this is new!
           name={meal.name}
           description={meal.description}
           price={meal.price}
