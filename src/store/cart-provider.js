@@ -36,12 +36,20 @@ const charFinder = (str) => {
 };
 
 const CartProvider = (props) => {
+  const totalAmount = () => {
+    const total = cartContext.items
+      .map((item) => item.qty * item.price)
+      .reduce((partial_sum, a) => partial_sum + a, 0);
+
+    cartContext.totalAmount = total;
+  };
+
   const addItemToCartHandler = (item) => {
     // event.preventDefault();
     // fruits.push(fruits[0]);
-    // console.log(item.amount);
 
-    cartContext.items[charFinder(item.id)].qty = item.amount;
+    cartContext.items[charFinder(item.id)].qty += item.amount;
+    totalAmount();
   };
 
   const removeItemFromCartHandler = (id) => {};

@@ -7,6 +7,18 @@ import CartItem from "./CartItem";
 const Cart = (props) => {
   // set state for modal
   const cartCtx = useContext(CartContext);
+  // //{ "id": "amount_m1", "amount": 1
+  // }
+  const cartItemHandler = (item) => {
+    const mealID = item.target.id;
+    const amount = item.target.value;
+    const mealData = {
+      id: mealID,
+      amount: +amount,
+    };
+    // console.log(item.target.value);
+    cartCtx.addItem(mealData);
+  };
   // family.filter(person => person.age > 18);
   const cartItems = cartCtx.items
     .filter((item) => item.qty > 0)
@@ -17,6 +29,7 @@ const Cart = (props) => {
           price={item.price}
           amount={item.qty}
           id={item.id}
+          itemHandler={cartItemHandler}
         />
       );
     });
@@ -27,7 +40,7 @@ const Cart = (props) => {
         <ul className={classes["cart-items"]}>{cartItems}</ul>
         <div className={classes.total}>
           <span>Total Amount</span>
-          <span>36.62</span>
+          <span>{cartCtx.totalAmount}</span>
         </div>
         <div className={classes.actions}>
           <button onClick={props.onClick} className={classes["button--alt"]}>
