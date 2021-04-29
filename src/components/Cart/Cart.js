@@ -22,9 +22,10 @@ const Cart = (props) => {
   // family.filter(person => person.age > 18);
   const cartItems = cartCtx.items
     .filter((item) => item.qty > 0)
-    .map((item) => {
+    .map((item, index) => {
       return (
         <CartItem
+          key={index.toString()}
           name={item.name}
           price={item.price}
           amount={item.qty}

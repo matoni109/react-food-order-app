@@ -37,23 +37,37 @@ const AvailableMeals = (props) => {
     cartCtx.addItem(cartItem);
   };
 
-  const mealsList = DUMMY_MEALS.map((meal) => {
-    return (
-      <>
-        <MealItem
-          id={meal.id} // this is new!
-          name={meal.name}
-          description={meal.description}
-          price={meal.price}
-          key={meal.id}
-          addItem={cartAdditionHandler}
-        />
-      </>
-    );
-  });
+  // const mealsList = DUMMY_MEALS.map((meal, index) => {
+  //   return (
+  //     <>
+  //       <MealItem
+  //         id={meal.id} // this is new!
+  //         name={meal.name}
+  //         description={meal.description}
+  //         price={meal.price}
+  //         key={meal.id}
+  //         addItem={cartAdditionHandler}
+  //       />
+  //     </>
+  //   );
+  // });
+
   return (
-    <Card className={classes.meals}>
-      <ul>{mealsList}</ul>
+    <Card key={1} className={classes.meals}>
+      <ul>
+        {DUMMY_MEALS.map((meal, index) => {
+          return (
+            <MealItem
+              id={meal.id} // this is new!
+              name={meal.name}
+              description={meal.description}
+              price={meal.price}
+              key={index.toString()}
+              addItem={cartAdditionHandler}
+            />
+          );
+        })}
+      </ul>
     </Card>
   );
 };

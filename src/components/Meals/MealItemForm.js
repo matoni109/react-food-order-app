@@ -19,7 +19,6 @@ const MealItemForm = (props) => {
   return (
     <form onSubmit={submitHandler} className={classes.form}>
       <Input
-        key={Math.random()}
         label="Amount"
         input={{
           id: "amount_" + props.id, // this changed!
