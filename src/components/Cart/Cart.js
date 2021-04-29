@@ -11,7 +11,14 @@ const Cart = (props) => {
   const cartItems = cartCtx.items
     .filter((item) => item.qty > 0)
     .map((item) => {
-      return <CartItem name={item.name} price={item.price} amount={item.qty} />;
+      return (
+        <CartItem
+          name={item.name}
+          price={item.price}
+          amount={item.qty}
+          id={item.id}
+        />
+      );
     });
 
   return (

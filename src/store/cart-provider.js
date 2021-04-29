@@ -35,8 +35,6 @@ const charFinder = (str) => {
   return -1 + +str.charAt(str.length - 1);
 };
 
-const idFinder = () => {};
-
 const CartProvider = (props) => {
   const addItemToCartHandler = (item) => {
     // event.preventDefault();
