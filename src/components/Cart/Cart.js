@@ -7,12 +7,12 @@ import CartItem from "./CartItem";
 const Cart = (props) => {
   // set state for modal
   const cartCtx = useContext(CartContext);
-
-  const cartItems = cartCtx.items.map((item) => {
-    return (
-      <CartItem name={item.name} price={item.price} amount={item.amount} />
-    );
-  });
+  // family.filter(person => person.age > 18);
+  const cartItems = cartCtx.items
+    .filter((item) => item.qty > 0)
+    .map((item) => {
+      return <CartItem name={item.name} price={item.price} amount={item.qty} />;
+    });
 
   return (
     <>

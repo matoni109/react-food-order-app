@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import classes from "./AvailableMeals.module.css";
 import MealItem from "./MealItem";
 import Card from "../UI/Card";
+import CartContext from "../../store/cart-context";
 
 const DUMMY_MEALS = [
   {
@@ -30,6 +31,12 @@ const DUMMY_MEALS = [
   },
 ];
 const AvailableMeals = (props) => {
+  const cartCtx = useContext(CartContext);
+
+  const cartAdditionHandler = (cartItem) => {
+    cartCtx.addItem(cartItem);
+  };
+
   const mealsList = DUMMY_MEALS.map((meal) => {
     return (
       <>
@@ -39,6 +46,7 @@ const AvailableMeals = (props) => {
           description={meal.description}
           price={meal.price}
           key={meal.id}
+          addItem={cartAdditionHandler}
         />
       </>
     );

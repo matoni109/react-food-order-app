@@ -4,9 +4,6 @@ import classes from "./MealItemForm.module.css";
 import CartContext from "../../store/cart-context";
 
 const MealItemForm = (props) => {
-  const cartCtx = useContext(CartContext);
-  const ammountInputRef = useRef();
-
   const submitHandler = (event) => {
     event.preventDefault();
 
@@ -16,7 +13,7 @@ const MealItemForm = (props) => {
       id: mealID,
       amount: +amount,
     };
-    console.info(mealData);
+    props.addItem(mealData);
   };
 
   return (
