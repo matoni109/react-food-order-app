@@ -1,3 +1,4 @@
+import React, { useReducer } from "react";
 import CartContext from "./cart-context";
 // this component managers the context from Cart Context
 const availableItems = [
@@ -34,8 +35,28 @@ const availableItems = [
 const charFinder = (str) => {
   return -1 + +str.charAt(str.length - 1);
 };
+// default state to compace reducer to
+const defaultCartState = {
+  items: [],
+  totalAmount: 0,
+};
 
+const cartReducer = (state, action) => {
+  return defaultCartState;
+};
+
+/// MAIN FUNCTION
 const CartProvider = (props) => {
+  //  cartReducer = fucntion that
+  //  defaultCartState inital state used to compare state
+  //  cartState = state snapshot called from the the provider below
+  //  dispatchCartAction = dispatch action of the Ruducer
+
+  const [cartState, dispatchCartAction] = useReducer(
+    cartReducer,
+    defaultCartState
+  );
+
   const totalAmount = () => {
     const total = cartContext.items
       .map((item) => item.qty * item.price)
@@ -53,9 +74,10 @@ const CartProvider = (props) => {
   };
 
   const removeItemFromCartHandler = (id) => {};
+  // links the Conext to the useReducer Hook
   const cartContext = {
-    items: availableItems,
-    totalAmount: 0,
+    items: cartState.items,
+    totalAmount: cartState.amount,
     addItem: addItemToCartHandler,
     removeItem: removeItemFromCartHandler,
   };
