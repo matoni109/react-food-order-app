@@ -41,15 +41,47 @@ const defaultCartState = {
   totalAmount: 0,
 };
 
+// kicks off reducer state change
 const cartReducer = (state, action) => {
+  if (action.type === "ADD") {
+    // recieves current state snapshot as state
+    const updatedItem = state.items.concat(action.item);
+    // find existing items.
+    const existingCartItemsIndex = state.items.findIndex(
+      (item) => item.id === action.item.id
+    );
+
+    const existingCartItem = state.items[existingCartItemsIndex];
+    let updatedItems;
+
+    if (existingCartItem) {
+      const updatedItem = {
+        ...existingCartItem,
+        amount: existingCartItem.amount + action.item.amount,
+      };
+      updatedItems = [...state.items];
+      updatedItems[existingCartItemsIndex] = updatedItem;
+    } else {
+      updatedItems = state.items.concat(action.item);
+    }
+
+    const updatedTotalAmount =
+      state.totalAmount + +action.item.price * +action.item.amount;
+    console.log(updatedTotalAmount);
+    return {
+      items: updatedItems,
+      totalAmount: updatedTotalAmount,
+      amount: updatedTotalAmount,
+    };
+  }
   return defaultCartState;
 };
 
 /// MAIN FUNCTION
 const CartProvider = (props) => {
-  //  cartReducer = fucntion that
+  //  cartReducer = fucntion that kicks off reducer state change
   //  defaultCartState inital state used to compare state
-  //  cartState = state snapshot called from the the provider below
+  //  cartState = state snapshot called from the the context provider below
   //  dispatchCartAction = dispatch action of the Ruducer
 
   const [cartState, dispatchCartAction] = useReducer(
@@ -57,27 +89,33 @@ const CartProvider = (props) => {
     defaultCartState
   );
 
-  const totalAmount = () => {
-    const total = cartContext.items
-      .map((item) => item.qty * item.price)
-      .reduce((partial_sum, a) => partial_sum + a, 0);
+  // const totalAmount = () => {
+  //   const total = cartContext.items
+  //     .map((item) => item.qty * item.price)
+  //     .reduce((partial_sum, a) => partial_sum + a, 0);
 
-    cartContext.totalAmount = total;
-  };
+  //   cartContext.totalAmount = total;
+  // };
 
   const addItemToCartHandler = (item) => {
+    // MY CODE
     // event.preventDefault();
     // fruits.push(fruits[0]);
+    // cartContext.items[charFinder(item.id)].qty += item.amount;
+    // totalAmount();
 
-    cartContext.items[charFinder(item.id)].qty += item.amount;
-    totalAmount();
+    // MAX CODE
+    dispatchCartAction({ type: "ADD", item: item });
   };
 
-  const removeItemFromCartHandler = (id) => {};
+  const removeItemFromCartHandler = (id) => {
+    dispatchCartAction({ type: "REMOVE", id: id });
+  };
   // links the Conext to the useReducer Hook
   const cartContext = {
     items: cartState.items,
     totalAmount: cartState.amount,
+    amount: cartState.amount,
     addItem: addItemToCartHandler,
     removeItem: removeItemFromCartHandler,
   };

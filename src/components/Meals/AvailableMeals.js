@@ -31,11 +31,9 @@ const DUMMY_MEALS = [
   },
 ];
 const AvailableMeals = (props) => {
-  const cartCtx = useContext(CartContext);
-
-  const cartAdditionHandler = (cartItem) => {
-    cartCtx.addItem(cartItem);
-  };
+  // const cartAdditionHandler = (cartItem) => {
+  //   cartCtx.addItem(cartItem);
+  // };
 
   // const mealsList = DUMMY_MEALS.map((meal, index) => {
   //   return (
@@ -63,7 +61,6 @@ const AvailableMeals = (props) => {
               description={meal.description}
               price={meal.price}
               key={index.toString()}
-              addItem={cartAdditionHandler}
             />
           );
         })}
