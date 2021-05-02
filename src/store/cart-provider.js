@@ -59,15 +59,18 @@ const cartReducer = (state, action) => {
         ...existingCartItem,
         amount: existingCartItem.amount + action.item.amount,
       };
+
+      // copy old array
       updatedItems = [...state.items];
       updatedItems[existingCartItemsIndex] = updatedItem;
     } else {
+      // if item is not already in array
       updatedItems = state.items.concat(action.item);
     }
 
     const updatedTotalAmount =
       state.totalAmount + +action.item.price * +action.item.amount;
-    console.log(updatedTotalAmount);
+    // console.log(updatedTotalAmount);
     return {
       items: updatedItems,
       totalAmount: updatedTotalAmount,
