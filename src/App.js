@@ -5,7 +5,7 @@ import Meals from "./components/Meals/Meals";
 import CartProvider from "./store/cart-provider";
 
 const App = () => {
-  const ammountInputRef = useRef();
+  // const ammountInputRef = useRef();
 
   const [cart, setCart] = useState();
 
@@ -14,13 +14,13 @@ const App = () => {
   };
 
   // function for onClick Cart
-  const submitHandler = (event) => {
-    event.preventDefault();
+  // const submitHandler = (event) => {
+  //   event.preventDefault();
 
-    // setEnteredTitle("");
-    // setAge("");
-    ammountInputRef.current.value = "";
-  };
+  //   // setEnteredTitle("");
+  //   // setAge("");
+  //   ammountInputRef.current.value = "";
+  // };
 
   return (
     <CartProvider>

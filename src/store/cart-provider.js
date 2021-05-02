@@ -59,24 +59,51 @@ const cartReducer = (state, action) => {
         ...existingCartItem,
         amount: existingCartItem.amount + action.item.amount,
       };
-
-      // copy old array
       updatedItems = [...state.items];
       updatedItems[existingCartItemsIndex] = updatedItem;
     } else {
-      // if item is not already in array
       updatedItems = state.items.concat(action.item);
     }
 
     const updatedTotalAmount =
       state.totalAmount + +action.item.price * +action.item.amount;
-    // console.log(updatedTotalAmount);
+
     return {
       items: updatedItems,
       totalAmount: updatedTotalAmount,
       amount: updatedTotalAmount,
     };
   }
+  // REMOVE
+  if (action.type === "REMOVE") {
+    // find the index of item with id
+    const existingCartItemsIndex = state.items.findIndex(
+      (item) => item.id === action.id
+    );
+    // get the array and x 1 off that amount
+    // make a copy of old state
+    //
+    const existingCartItem = state.items[existingCartItemsIndex];
+    // copy state and change amount
+    let updatedItems;
+
+    let itemPrice = state.items[existingCartItemsIndex].price;
+    if (existingCartItem) {
+      const updatedItem = {
+        ...existingCartItem,
+        amount: existingCartItem.amount - 1,
+      };
+      updatedItems = [...state.items];
+      updatedItems[existingCartItemsIndex] = updatedItem;
+    }
+    const updatedTotalAmount = state.totalAmount - +itemPrice * 1;
+    return {
+      items: updatedItems,
+      totalAmount: updatedTotalAmount,
+      amount: updatedTotalAmount,
+    };
+  }
+
   return defaultCartState;
 };
 
@@ -112,6 +139,7 @@ const CartProvider = (props) => {
   };
 
   const removeItemFromCartHandler = (id) => {
+    console.log(id);
     dispatchCartAction({ type: "REMOVE", id: id });
   };
   // links the Conext to the useReducer Hook

@@ -18,9 +18,8 @@ const Cart = (props) => {
   };
 
   const removeFromCartHandler = (id) => {
-    cartCtx.removeItem({
-      id: props.id,
-    });
+    // console.log(id);
+    cartCtx.removeItem(id);
   };
   // //{ "id": "amount_m1", "amount": 1
   // }
