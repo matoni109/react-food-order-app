@@ -37,7 +37,7 @@ const Cart = (props) => {
   const totalAmount =
     cartCtx.totalAmount > 0 ? cartCtx.totalAmount.toFixed(2) : 0;
   // const totalAmount = cartCtx.totalAmount || 0;
-  const hasItems = cartCtx.items.length > 0;
+  const hasItems = cartCtx.totalAmount > 0;
 
   const cartItems = cartCtx.items
     .filter((item) => item.amount > 0)

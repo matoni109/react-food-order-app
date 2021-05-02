@@ -88,12 +88,18 @@ const cartReducer = (state, action) => {
     let updatedItems;
 
     let itemPrice = state.items[existingCartItemsIndex].price;
-    if (existingCartItem) {
+    if (existingCartItem.amount === 1) {
+      // filter gives a new array where item id does not equ
+      // the id from the action state
+      updatedItems = state.items.filter((item) => item.id !== action.id);
+    } else {
       const updatedItem = {
         ...existingCartItem,
         amount: existingCartItem.amount - 1,
       };
+      // make a copy of old state
       updatedItems = [...state.items];
+      // update the item at the index with changed state
       updatedItems[existingCartItemsIndex] = updatedItem;
     }
     const updatedTotalAmount = state.totalAmount - +itemPrice * 1;
