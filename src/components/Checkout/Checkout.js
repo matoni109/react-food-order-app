@@ -8,12 +8,22 @@ const Checkout = (props) => {
   const confirmHandler = (event) => {
     event.preventDefault();
 
-    if (!setEnteredNameIsValid) {
+    if (
+      !setEnteredNameIsValid ||
+      !setEnteredStreetIsValid ||
+      !setEnteredPostIsValid ||
+      !setEnteredCityIsValid
+    ) {
       return;
     }
 
     resetNameInput();
+    resetStreetInput();
+    resetPostInput();
+    resetCityInput();
   };
+
+  // inputs
 
   const {
     value: enteredName,
@@ -27,9 +37,53 @@ const Checkout = (props) => {
     // yep
   } = useInput((value) => value.trim() !== "");
 
+  const {
+    value: enteredStreet,
+    isValid: setEnteredStreetIsValid,
+    hasError: streetInputHasError,
+    valueChangeHandler: streetChangedHandler,
+    inputBlurHandler: streetBlurHandler,
+    reset: resetStreetInput,
+  } = useInput((value) => value.trim() !== "");
+
+  const {
+    value: enteredPost,
+    isValid: setEnteredPostIsValid,
+    hasError: postInputHasError,
+    valueChangeHandler: postChangedHandler,
+    inputBlurHandler: postBlurHandler,
+    reset: resetPostInput,
+  } = useInput((value) => value.trim() !== "");
+
+  const {
+    value: enteredCity,
+    isValid: setEnteredCityIsValid,
+    hasError: cityInputHasError,
+    valueChangeHandler: cityChangedHandler,
+    inputBlurHandler: cityBlurHandler,
+    reset: resetCityInput,
+  } = useInput((value) => value.trim() !== "");
+
   /// css bit
   const nameInputClasses = nameInputHasError ? classes["invalid"] : "";
+  const streetInputClasses = streetInputHasError ? classes["invalid"] : "";
+  const postInputClasses = postInputHasError ? classes["invalid"] : "";
+  const cityInputClasses = cityInputHasError ? classes["invalid"] : "";
+  // form valid
 
+  let formIsValid = false;
+
+  if (
+    setEnteredNameIsValid &&
+    setEnteredStreetIsValid &&
+    setEnteredPostIsValid &&
+    setEnteredCityIsValid
+  ) {
+    formIsValid = true;
+    console.log(formIsValid);
+  }
+
+  // jsx
   return (
     <form className={classes.form} onSubmit={confirmHandler}>
       <div className={classes.control + " " + nameInputClasses}>
@@ -42,23 +96,41 @@ const Checkout = (props) => {
           value={enteredName}
         />
       </div>
-      <div className={classes.control}>
+      <div className={classes.control + " " + streetInputClasses}>
         <label htmlFor="street">Street</label>
-        <input type="text" id="street" />
+        <input
+          type="text"
+          id="street"
+          onChange={streetChangedHandler}
+          onBlur={streetBlurHandler}
+          value={enteredStreet}
+        />
       </div>
-      <div className={classes.control}>
+      <div className={classes.control + " " + postInputClasses}>
         <label htmlFor="postal">Postal Code</label>
-        <input type="text" id="postal" />
+        <input
+          type="text"
+          id="postal"
+          onChange={postChangedHandler}
+          onBlur={postBlurHandler}
+          value={enteredPost}
+        />
       </div>
-      <div className={classes.control}>
+      <div className={classes.control + " " + cityInputClasses}>
         <label htmlFor="city">City</label>
-        <input type="text" id="city" />
+        <input
+          type="text"
+          id="city"
+          onChange={cityChangedHandler}
+          onBlur={cityBlurHandler}
+          value={enteredCity}
+        />
       </div>
       <div className={classes.actions}>
         <button type="button" onClick={props.onCancel}>
           Cancel
         </button>
-        <button className={classes.submit}>Confirm</button>
+        {formIsValid && <button className={classes.submit}>Confirm</button>}
       </div>
     </form>
   );
