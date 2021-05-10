@@ -4,8 +4,10 @@ import classes from "./Cart.module.css";
 import CartContext from "../../store/cart-context";
 import CartItem from "./CartItem";
 import Checkout from "../Checkout/Checkout";
+import useHttp from "../../hooks/use-http";
 
 const Cart = (props) => {
+  const httpData = useHttp();
   const cartCtx = useContext(CartContext);
   const [orderForm, setOrderForm] = useState(false);
   // set state for modal
@@ -26,19 +28,7 @@ const Cart = (props) => {
     // console.log(id);
     cartCtx.removeItem(id);
   };
-  // //{ "id": "amount_m1", "amount": 1
-  // }
-  // const cartItemHandler = (item) => {
-  //   const mealID = item.target.id;
-  //   const amount = item.target.value;
-  //   const mealData = {
-  //     id: mealID,
-  //     amount: +amount,
-  //   };
-  //   // console.log(item.target.value);
-  //   cartCtx.addItem(mealData);
-  // };
-  // family.filter(person => person.age > 18);
+
   const totalAmount =
     cartCtx.totalAmount > 0 ? cartCtx.totalAmount.toFixed(2) : 0;
   // const totalAmount = cartCtx.totalAmount || 0;
@@ -61,7 +51,44 @@ const Cart = (props) => {
       );
     });
 
-  const formContent = <Checkout onCancel={formlHandler} />;
+  // new order handler
+  const createNewOrderHandler = (orderData) => {
+    const userDeets = orderData;
+    // get cart items
+    const cartItems = cartCtx.items;
+    const orderObject = {
+      total: cartCtx.totalAmount,
+      items: cartItems,
+      userInfo: userDeets,
+    };
+
+    return orderObject;
+  };
+
+  // submit order
+
+  const submittOrderHandler = (orderData) => {
+    // get user order object
+    const orderData1 = createNewOrderHandler(orderData);
+    console.info(orderData1);
+
+    // setup hook
+    const { isLoading, error, sendRequest: sendCart } = httpData;
+    // send info to firebase
+    sendCart({
+      url:
+        "https://react-db-api-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: orderData1, // don't stringify
+    });
+  };
+
+  const formContent = (
+    <Checkout onOrder={submittOrderHandler} onCancel={formlHandler} />
+  );
   // console.log(cartCtx.totalAmount);
   return (
     <>
@@ -86,4 +113,37 @@ const Cart = (props) => {
     </>
   );
 };
+
 export default Cart;
+
+//  const starWars = data2.results.map((movieData) => {
+//    return {
+//      id: movieData.episode_id,
+//      title: movieData.title,
+//      openingText: movieData.opening_crawl,
+//      releaseDate: movieData.release_date,
+//    };
+//  });
+
+//
+//
+//  // console.log(fetchMoviesHandler());
+//  loadedMovies.reverse().push(...starWars);
+
+//
+
+//
+
+// //{ "id": "amount_m1", "amount": 1
+// }
+// const cartItemHandler = (item) => {
+//   const mealID = item.target.id;
+//   const amount = item.target.value;
+//   const mealData = {
+//     id: mealID,
+//     amount: +amount,
+//   };
+//   // console.log(item.target.value);
+//   cartCtx.addItem(mealData);
+// };
+// family.filter(person => person.age > 18);

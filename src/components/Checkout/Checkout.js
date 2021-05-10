@@ -1,3 +1,4 @@
+import React from "react";
 import classes from "./Checkout.module.css";
 import useInput from "../../hooks/use-input";
 // import classNames from "classnames/bind";
@@ -5,6 +6,10 @@ import useInput from "../../hooks/use-input";
 // let cx = classNames.bind(classes);
 
 const Checkout = (props) => {
+  const closeForm = (event) => {
+    props.onCancel();
+  };
+
   const confirmHandler = (event) => {
     event.preventDefault();
 
@@ -16,11 +21,23 @@ const Checkout = (props) => {
     ) {
       return;
     }
-
+    const values = {
+      name: enteredName,
+      street: enteredStreet,
+      postCode: enteredPost,
+      city: enteredCity,
+    };
     resetNameInput();
     resetStreetInput();
     resetPostInput();
     resetCityInput();
+
+    props.onOrder({
+      name: enteredName,
+      street: enteredStreet,
+      postCode: enteredPost,
+      city: enteredCity,
+    });
   };
 
   // inputs
@@ -80,7 +97,6 @@ const Checkout = (props) => {
     setEnteredCityIsValid
   ) {
     formIsValid = true;
-    console.log(formIsValid);
   }
 
   // jsx
