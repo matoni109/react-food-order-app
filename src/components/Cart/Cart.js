@@ -10,6 +10,8 @@ const Cart = (props) => {
   const httpData = useHttp();
   const cartCtx = useContext(CartContext);
   const [orderForm, setOrderForm] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cartSuccess, setCartSuccess] = useState(false);
   // set state for modal
   const addToCartHandler = (amount) => {
     console.log(amount);
@@ -66,14 +68,13 @@ const Cart = (props) => {
   };
 
   // submit order
-
+  // setup hook
+  const { isLoading, error, sendRequest: sendCart } = httpData;
   const submittOrderHandler = (orderData) => {
     // get user order object
+    setIsSubmitting(true);
     const orderData1 = createNewOrderHandler(orderData);
-    console.info(orderData1);
 
-    // setup hook
-    const { isLoading, error, sendRequest: sendCart } = httpData;
     // send info to firebase
     sendCart({
       url:
@@ -84,31 +85,45 @@ const Cart = (props) => {
       },
       body: orderData1, // don't stringify
     });
+    setIsSubmitting(false);
+    setCartSuccess(true);
   };
+
+  const isSubmittingModalContent = <h3> Sending Order Data </h3>;
+  const cartSuccessText = <h3> Order Placed !!! </h3>;
 
   const formContent = (
     <Checkout onOrder={submittOrderHandler} onCancel={formlHandler} />
   );
+  // submit logic
+  const cartModalContent = (
+    <>
+      <ul className={classes["cart-items"]}>{cartItems}</ul>
+      <div className={classes.total}>
+        <span>Total Amount</span>
+        <span>$ {totalAmount}</span>
+      </div>
+      <div className={classes.actions}>
+        <button onClick={props.onClick} className={classes["button--alt"]}>
+          Close
+        </button>
+        {hasItems && !orderForm && (
+          <button onClick={formlHandler} className={classes.button}>
+            Order
+          </button>
+        )}
+      </div>
+      {orderForm && hasItems && formContent}
+    </>
+  );
+
   // console.log(cartCtx.totalAmount);
   return (
     <>
       <Modal onClick={props.onClick}>
-        <ul className={classes["cart-items"]}>{cartItems}</ul>
-        <div className={classes.total}>
-          <span>Total Amount</span>
-          <span>$ {totalAmount}</span>
-        </div>
-        <div className={classes.actions}>
-          <button onClick={props.onClick} className={classes["button--alt"]}>
-            Close
-          </button>
-          {hasItems && !orderForm && (
-            <button onClick={formlHandler} className={classes.button}>
-              Order
-            </button>
-          )}
-        </div>
-        {orderForm && hasItems && formContent}
+        {!isLoading && !cartSuccess && cartModalContent}
+        {isLoading && !cartSuccess && isSubmittingModalContent}
+        {cartSuccess && cartSuccessText}
       </Modal>
     </>
   );
