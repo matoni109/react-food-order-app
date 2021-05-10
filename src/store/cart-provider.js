@@ -110,6 +110,9 @@ const cartReducer = (state, action) => {
     };
   }
 
+  if (action.type === "CLEAR") {
+    return defaultCartState;
+  }
   return defaultCartState;
 };
 
@@ -148,6 +151,11 @@ const CartProvider = (props) => {
     console.log(id);
     dispatchCartAction({ type: "REMOVE", id: id });
   };
+
+  const clearCartHandler = () => {
+    dispatchCartAction({ type: "CLEAR" });
+  };
+
   // links the Conext to the useReducer Hook
   const cartContext = {
     items: cartState.items,
@@ -155,6 +163,7 @@ const CartProvider = (props) => {
     amount: cartState.amount,
     addItem: addItemToCartHandler,
     removeItem: removeItemFromCartHandler,
+    clearCart: clearCartHandler,
   };
   // Cart Context Provider is the wrapper for the app children //
   return (

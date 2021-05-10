@@ -87,10 +87,21 @@ const Cart = (props) => {
     });
     setIsSubmitting(false);
     setCartSuccess(true);
+    // call the provider and nuke items
+    cartCtx.clearCart();
   };
 
   const isSubmittingModalContent = <h3> Sending Order Data </h3>;
-  const cartSuccessText = <h3> Order Placed !!! </h3>;
+  const cartSuccessText = (
+    <>
+      <h3> Order Placed !!! </h3>
+      <div className={classes.actions}>
+        <button onClick={props.onClick} className={classes["button"]}>
+          Close
+        </button>
+      </div>
+    </>
+  );
 
   const formContent = (
     <Checkout onOrder={submittOrderHandler} onCancel={formlHandler} />
@@ -123,7 +134,7 @@ const Cart = (props) => {
       <Modal onClick={props.onClick}>
         {!isLoading && !cartSuccess && cartModalContent}
         {isLoading && !cartSuccess && isSubmittingModalContent}
-        {cartSuccess && cartSuccessText}
+        {!isLoading && cartSuccess && cartSuccessText}
       </Modal>
     </>
   );
